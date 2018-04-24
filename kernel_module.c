@@ -43,11 +43,11 @@ static ssize_t device_write(struct file *filp, const char __user *buff, size_t l
 
 static ssize_t device_read(struct file *filp, const char __user *buff, size_t len, loff_t *off){
   //need to implement sending the button press info from msg here
-  ssize_t dummy = copy_to_user(buffer, msg, length);
+  ssize_t dummy = copy_to_user(buff, msg, len);
 	if(dummy == 0 && msg[0] != '\0'){
 		printk("%s\n", msg);
   }
-	message[0] = '\0';
+	msg[0] = '\0';
 	return 1;
 }
 
