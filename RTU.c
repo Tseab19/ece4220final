@@ -31,6 +31,9 @@ struct sockaddr_in server;
 struct sockaddr_in addr;
 char buffer[50];
 
+#define SPI_CHANNEL	      0	// 0 or 1
+#define SPI_SPEED 	2000000	// Max speed is 3.6 MHz when VDD = 5 V
+#define ADC_CHANNEL       2	// Between 1 and 3
 
 void establishConnection(int port){
   sock = socket(AF_INET, SOCK_DGRAM, 0); // Creates socket. Connectionless.
@@ -68,12 +71,16 @@ void establishConnection(int port){
 
 
 
-int main(void){
+int main(int argc, char* argv[]){
+  if (argc < 2){
+	  printf("usage: %s port\n", argv[0]);
+  	  exit(0);
+  	}
   if((cdev_id = open(CHAR_DEV, O_RDWR)) == -1) {
 		printf("Cannot open device %s\n", CHAR_DEV);
 		exit(1);
 	}
   establishConnection(atoi(argv[1]));
 
-
+  return 0;
 }
