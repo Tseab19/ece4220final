@@ -68,23 +68,23 @@ static irqreturn_t button_isr(int irq, void *dev_id){
 	switch(result){
 	case 0x100000:
 		printk("Button 5 pushed\n");
-		freq = 300;
+		msg[0] = '5';
 		break;
 	case 0x80000:
 		printk("Button 4 pushed\n");
-    msg[0] = '5';
+    msg[0] = '4';
 		break;
 	case 0x40000:
 		printk("Button 3 pushed\n");
-    msg[0] = '5';
+    msg[0] = '3';
 		break;
 	case 0x20000:
 		printk("Button 2 pushed\n");
-    msg[0] = '5';
+    msg[0] = '2';
 		break;
 	case 0x10000:
 		printk("Button 1 pushed\n");
-    msg[0] = '5';
+    msg[0] = '1';
 		break;
 
     //add switch cases here
@@ -142,7 +142,7 @@ int thread_init(void)
 	*EDGE |= 0x1F0000;
 
   //need to set up switch detection here
-  
+
 	//Request interrupt
 	requestReturn = request_irq(79, button_isr, IRQF_SHARED, "Button_handler", &mydev_id);
 	printk("Button Detection enabled.\n");
