@@ -35,6 +35,20 @@ char buffer[50];
 #define SPI_SPEED 	2000000	// Max speed is 3.6 MHz when VDD = 5 V
 #define ADC_CHANNEL       2	// Between 1 and 3
 
+uint16_t get_ADC(int channel){
+  uint8_t spiData[3];
+	spiData[0] = 0b00000001; // Contains the Start Bit
+	spiData[1] = 0b10000000 | (ADC_chan << 4);	// Mode and Channel: M0XX000
+	spiData[2] = 0;	// "Don't care", this value doesn't matter.
+	wiringPiSPIDataRW(SPI_CHANNEL, spiData, 3);
+	return ((spiData[1] << 8) | spiData[2]);
+}
+
+void* ADC_handler(void* args){
+  
+}
+
+
 void establishConnection(int port){
   sock = socket(AF_INET, SOCK_DGRAM, 0); // Creates socket. Connectionless.
   	if (sock < 0){
