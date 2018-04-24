@@ -32,7 +32,7 @@ struct sockaddr_in addr;
 char buffer[50];
 
 
-void establishConnection(){
+void establishConnection(int port){
   sock = socket(AF_INET, SOCK_DGRAM, 0); // Creates socket. Connectionless.
   	if (sock < 0){
 		error("Opening socket");
@@ -42,7 +42,7 @@ void establishConnection(){
   server.sin_family = AF_INET;		// symbol constant for Internet domain
   server.sin_addr.s_addr = INADDR_ANY;		// IP address of the machine on which
 											// the server is running
- 	server.sin_port = htons(atoi(argv[1]));	// port number
+ 	server.sin_port = htons(port);	// port number
 
   	 // binds the socket to the address of the host and the port number
   if (bind(sock, (struct sockaddr *)&server, length) < 0)
@@ -73,7 +73,7 @@ int main(void){
 		printf("Cannot open device %s\n", CHAR_DEV);
 		exit(1);
 	}
-  establishConnection();
+  establishConnection(atoi(argv[1]));
 
 
 }
