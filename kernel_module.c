@@ -23,19 +23,20 @@ static int major;
 static char msg[MSG_SIZE];
 
 int freq = 0;
-unsigned long * BASE;
+//pointers used to point to each part of the register
+unsigned long * BASE; //GPFSEL
 unsigned long * GPFSEL0;
 unsigned long * GPFSEL1;
 unsigned long * GPFSEL2;
 unsigned long * GPSET;
 unsigned long * GPSCLR;
-unsigned long * PUD;
+unsigned long * PUD; //Pull up/down register
 unsigned long * PUD_CLK;
-unsigned long * EDGE;
-unsigned long * EVENT;
+unsigned long * EDGE; //rising edge detection
+unsigned long * EVENT; //event detetction register
 MODULE_LICENSE("GPL");
 
-int mydev_id;
+int mydev_id; //character device
 
 static ssize_t device_write(struct file *filp, const char __user *buff, size_t len, loff_t *off){
   //not needed
@@ -67,24 +68,24 @@ static irqreturn_t button_isr(int irq, void *dev_id){
 
 	switch(result){
 	case 0x100000:
-		printk("Button 5 pushed\n");
-		msg[0] = '5';
+		printk("Button 5 pushed\n"); //used for testing to see in dmesg
+		msg[0] = '5'; //message to be sent when device read is called
 		break;
 	case 0x80000:
 		printk("Button 4 pushed\n");
-    msg[0] = '4';
+    msg[0] = '4'; //message to be sent when device read is called
 		break;
 	case 0x40000:
 		printk("Button 3 pushed\n");
-    msg[0] = '3';
+    msg[0] = '3'; //message to be sent when device read is called
 		break;
 	case 0x20000:
 		printk("Button 2 pushed\n");
-    msg[0] = '2';
+    msg[0] = '2'; //message to be sent when device read is called
 		break;
 	case 0x10000:
 		printk("Button 1 pushed\n");
-    msg[0] = '1';
+    msg[0] = '1'; //message to be sent when device read is called
 		break;
 
     //add switch cases here
@@ -103,16 +104,19 @@ int thread_init(void)
 {
 	int requestReturn;
 
+  //register charcter device
 	major = register_chrdev(0, CDEV_NAME, &fops);
 	if (major < 0) {
      		printk("Registering the character device failed with %d\n", major);
 	     	return major;
 	}
+  //used for setting up the character device
 	printk("Lab6_cdev_kmod example, assigned major: %d\n", major);
 	printk("Create Char Device (node) with: sudo mknod /dev/%s c %d 0\n", CDEV_NAME, major);
 
-	BASE = ioremap(0x3F200000, 4096);
-	PUD = BASE + 0x94/4;
+  //bit mapping to set up registers
+	BASE = ioremap(0x3F200000, 4096); //map to the base
+	PUD = BASE + 0x94/4; //pull up/down resistor
 	PUD_CLK = BASE + 0x98/4;
 
 	EDGE = BASE + 0x4C/4;
@@ -150,9 +154,9 @@ int thread_init(void)
 }
 
 void thread_cleanup(void) {
-	*EDGE = *EDGE & 0xffe0ffff;
+	*EDGE = *EDGE & 0xffe0ffff; //clear registers
 	*EVENT = *EVENT | 0x001f0000;
-	free_irq(79, &mydev_id);
+	free_irq(79, &mydev_id); //release the interupt handler
 
 	unregister_chrdev(major, CDEV_NAME);
 	printk("Char Device /dev/%s unregistered.\n", CDEV_NAME);

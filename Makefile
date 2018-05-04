@@ -1,5 +1,5 @@
-obj-m += kthread_test.o
-obj-m += hrtimer_test.o
+obj-m += kernel_module.o
+
 
 
 all:
