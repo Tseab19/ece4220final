@@ -1,5 +1,5 @@
 # ece4220final
-##Thomas Sebolt  Dalton Koch
+## Thomas Sebolt  Dalton Koch
 
-###Instruction for Running system - 
+### Instruction for Running system -
 fsnfksfksk
