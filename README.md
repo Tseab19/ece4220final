@@ -1,5 +1,7 @@
 # ece4220final
-## Thomas Sebolt  Dalton Koch
+## Thomas Sebolt   &   Dalton Koch
 
 ### Instruction for Running system -
-fsnfksfksk
+To run the system that we have implemented you must first download the kernel_module.c, Historian.c, RTU.c, and the Makefile. Once these have been downloaded type "make clean" in the directory where you have download these files. then type "make". now that the .ko files have been made for the kernel module type "sudo insmod kernel_module.ko". After the module has been installed type "dmesg" into the terminal. The copy and paste the line that was printed that says "sudo mknod /dev/Project c 244 0". Next you will need to compile the RTU.c file on each Rpi3. To compile the file type "gcc RTU.c -lpthread -lwiringPi". To run the RTU simply type "./a.out". Now you will need to compile the Historin.c file on the Workstation computer. To compile this file you must type "gcc Historian.c -lpthread". To run the Historian simply type "./a.out 2100". **The number after the ./a.out is the port number used and it must be 2100.** The last step is to set up the analog signal. The input should be plugged into the A2 pin on the baord and the ground below it on the ground pin.
+
+Now that everything is compiled and running to use the system all inputs are made to the Historian. To turn on/off an LED on the board type 1, then select the LED to be turned on/off. The type 1 to turn on the LED, and 0 to turn off the LED. Lastly you must select the board to send the message to, for this the last two number of the IP of the Pi must be input into the program. Once you are back to the main menu of the Historian to view the event log simply type 2 and the log will be printed. 
